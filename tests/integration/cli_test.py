@@ -102,10 +102,8 @@ class CLITestCase(DockerClientTestCase):
         self.assertEqual(old_ids, new_ids)
 
 
-    @patch('sys.stdout', new_callable=StringIO)
+    @patch('dockerpty.PseudoTerminal')
     def test_run_with_links(self, mock_stdout):
-        mock_stdout.fileno = lambda: 1
-
         self.command.base_dir = 'tests/fixtures/links-figfile'
         self.command.dispatch(['run', 'web', '/bin/true'], None)
         db = self.command.project.get_service('db')
@@ -113,19 +111,15 @@ class CLITestCase(DockerClientTestCase):
         self.assertEqual(len(db.containers()), 1)
         self.assertEqual(len(console.containers()), 0)
 
-    @patch('sys.stdout', new_callable=StringIO)
+    @patch('dockerpty.PseudoTerminal')
     def test_run_with_no_deps(self, mock_stdout):
-        mock_stdout.fileno = lambda: 1
-
         self.command.base_dir = 'tests/fixtures/links-figfile'
         self.command.dispatch(['run', '--no-deps', 'web', '/bin/true'], None)
         db = self.command.project.get_service('db')
         self.assertEqual(len(db.containers()), 0)
 
-    @patch('sys.stdout', new_callable=StringIO)
+    @patch('dockerpty.PseudoTerminal')
     def test_run_does_not_recreate_linked_containers(self, mock_stdout):
-        mock_stdout.fileno = lambda: 1
-
         self.command.base_dir = 'tests/fixtures/links-figfile'
         self.command.dispatch(['up', '-d', 'db'], None)
         db = self.command.project.get_service('db')
