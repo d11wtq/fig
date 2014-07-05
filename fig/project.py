@@ -146,8 +146,8 @@ class Project(object):
         for service in self.get_services(service_names):
             service.start(**options)
 
-    def stop(self, service_names=None, **options):
-        for service in reversed(self.get_services(service_names)):
+    def stop(self, service_names=None, include_links=True, **options):
+        for service in reversed(self.get_services(service_names, include_links=include_links)):
             service.stop(**options)
 
     def kill(self, service_names=None, **options):

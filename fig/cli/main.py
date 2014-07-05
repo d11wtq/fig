@@ -288,11 +288,22 @@ class TopLevelCommand(Command):
         """
         Stop running containers without removing them.
 
-        They can be started again with `fig start`.
+        They can be started again with `fig start`. Linked containers will also
+        be stopped, unless they are linked to by other running services, or the
+        `--no-deps` option is given.
 
-        Usage: stop [SERVICE...]
+        Usage: stop [options] [SERVICE...]
+
+        Options:
+            --no-deps  Don't stop linked services.
         """
-        self.project.stop(service_names=options['SERVICE'])
+        include_links = not options['--no-deps']
+        service_names = options['SERVICE']
+
+        self.project.stop(
+            service_names=service_names,
+            include_links=include_links
+        )
 
     def up(self, options):
         """
