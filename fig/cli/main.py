@@ -174,13 +174,23 @@ class TopLevelCommand(Command):
         """
         Remove stopped service containers.
 
+        Linked containers will also be removed, unless the `--no-deps` option
+        is given.
+
         Usage: rm [options] [SERVICE...]
 
         Options:
-            --force   Don't ask to confirm removal
-            -v        Remove volumes associated with containers
+            --no-deps  Don't remove linked containers
+            --force    Don't ask to confirm removal
+            -v         Remove volumes associated with containers
         """
-        all_containers = self.project.containers(service_names=options['SERVICE'], stopped=True)
+        include_links = not options['--no-deps']
+        service_names = options['SERVICE']
+        all_containers = self.project.containers(
+            service_names=service_names,
+            include_links=include_links,
+            stopped=True
+        )
         stopped_containers = [c for c in all_containers if not c.is_running]
 
         if len(stopped_containers) > 0:

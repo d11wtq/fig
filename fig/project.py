@@ -178,9 +178,9 @@ class Project(object):
         for service in self.get_services(service_names):
             service.remove_stopped(**options)
 
-    def containers(self, service_names=None, *args, **kwargs):
+    def containers(self, service_names=None, include_links=False, *args, **kwargs):
         l = []
-        for service in self.get_services(service_names):
+        for service in self.get_services(service_names, include_links=include_links):
             for container in service.containers(*args, **kwargs):
                 l.append(container)
         return l
