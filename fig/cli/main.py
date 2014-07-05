@@ -225,7 +225,7 @@ class TopLevelCommand(Command):
             if len(deps) > 0:
                 self.project.up(
                     service_names=deps,
-                    start_links=True,
+                    include_links=True,
                     recreate=False,
                 )
 
@@ -318,13 +318,13 @@ class TopLevelCommand(Command):
         """
         detached = options['-d']
 
-        start_links = not options['--no-deps']
+        include_links = not options['--no-deps']
         recreate = not options['--no-recreate']
         service_names = options['SERVICE']
 
         to_attach = self.project.up(
             service_names=service_names,
-            start_links=start_links,
+            include_links=include_links,
             recreate=recreate
         )
 

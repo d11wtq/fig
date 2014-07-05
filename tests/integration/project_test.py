@@ -166,7 +166,7 @@ class ProjectTest(DockerClientTestCase):
         project.start()
         self.assertEqual(len(project.containers()), 0)
 
-        project.up(['web'], start_links=False)
+        project.up(['web'], include_links=False)
         self.assertEqual(len(project.containers()), 1)
         self.assertEqual(len(web.containers()), 1)
         self.assertEqual(len(db.containers()), 0)
